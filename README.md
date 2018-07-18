@@ -18,4 +18,15 @@ This application provides some tools:
 
 - Fill your config.php with your information (database credentials, host, ip...)
 
-**NOT FINISHED YET**
+```php
+/*Initialize the server and it will start getting data from device, 
+parsing it and storing it into the database
+*/
+$server = new SocketServer(Conf::host, Conf::port);
+$server->runServer();
+```
+
+## To do:
+
+- [ ] Error with longitude (Maybe parsing or related to encoding with bytes?)
+

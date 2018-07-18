@@ -11,11 +11,12 @@ namespace lbarrous\TeltonikaDecoder;
 use lbarrous\TeltonikaDecoder\Entities\AVLData;
 use lbarrous\TeltonikaDecoder\Entities\GPSData;
 use lbarrous\TeltonikaDecoder\Entities\IOData;
+use lbarrous\TeltonikaDecoder\Entities\ImeiNumber;
 
 class TeltonikaDecoderImp implements TeltonikaDecoder
 {
 
-    const HEX_DATA_LENGHT = 82;
+    const HEX_DATA_LENGHT = 64;
     const HEX_DATA_HEADER = 20;
 
     const CODEC8 = 8;
@@ -37,6 +38,7 @@ class TeltonikaDecoderImp implements TeltonikaDecoder
     const VALUE_HEX_LENGTH = 2;
     const ELEMENT_COUNT_1B_HEX_LENGTH = 2;
 
+    private $imei;
     private $dataFromDevice;
     private $AVLData;
 
@@ -44,9 +46,10 @@ class TeltonikaDecoderImp implements TeltonikaDecoder
      * TeltonikaDecoderImp constructor.
      * @param $dataFromDevice
      */
-    public function __construct(string $dataFromDevice)
+    public function __construct(string $dataFromDevice, $imei)
     {
         $this->dataFromDevice = $dataFromDevice;
+        $this->imei = $imei;
         $this->AVLData = array();
     }
 
@@ -101,16 +104,18 @@ class TeltonikaDecoderImp implements TeltonikaDecoder
         return $AVLArray;
     }
 
-    public function codec8Decode(string $hexDataOfElement) :AVLData {
+    private function codec8Decode(string $hexDataOfElement) :AVLData {
 
         $arrayElement = array();
 
         $AVLElement = new AVLData();
 
+        $AVLElement->setImei($this->imei);
+
         //We only get first 10 characters to get timestamp up to seconds.
         $timestamp = substr(hexdec(substr($hexDataOfElement, 0, self::TIMESTAMP_HEX_LENGTH)), 0, 10);
         $dateTimeWithoutFormat = new \DateTime();
-        $dateTimeWithoutFormat->setTimestamp($timestamp);
+        $dateTimeWithoutFormat->setTimestamp(intval($timestamp));
         $dateTimeWithFormat =  $dateTimeWithoutFormat->format('Y-m-d H:i:s') . "\n";
 
         $AVLElement->setTimestamp($timestamp);

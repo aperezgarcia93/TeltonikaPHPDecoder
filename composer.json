@@ -11,7 +11,8 @@
   ],
   "require": {
     "phpunit/phpunit": "7.2.6",
-    "react/socket": "v0.8.12"
+    "react/socket": "v0.8.12",
+    "catfan/medoo": "v1.5.7"
   },
   "autoload":{
     "psr-4": {

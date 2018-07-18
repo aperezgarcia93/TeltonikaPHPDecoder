@@ -15,6 +15,23 @@ class AVLData implements \JsonSerializable
     private $priority;
     private $gpsData;
     private $IOData;
+    private $imei;
+
+    /**
+     * @return mixed
+     */
+    public function getImei()
+    {
+        return $this->imei;
+    }
+
+    /**
+     * @param mixed $imei
+     */
+    public function setImei($imei): void
+    {
+        $this->imei = $imei;
+    }
 
     /**
      * @return mixed
@@ -108,6 +125,7 @@ class AVLData implements \JsonSerializable
     {
         return
             [
+                'imei' => $this->getImei()->getImeiNumber(),
                 'timestamp'   => $this->getTimestamp(),
                 'datetime'   => $this->getDateTime(),
                 'priority'   => $this->getPriority(),
