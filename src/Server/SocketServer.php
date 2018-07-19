@@ -58,11 +58,11 @@ class SocketServer
             //We set a react event for every time we get data on our socket.
             $connection->on('data', function($data) use ($connection, &$hexDataGPS, &$imei){
 
-                //We always get binary info so we decode it into HEX
-                $data = bin2hex($data);
-
                 //If we get a 17 characters string it means we are getting IMEI number, we have to decode it, check IMEI and send confirmation
                 if(strlen($data) == 17) {
+
+                    //We always get binary info so we decode it into HEX
+                    $data = bin2hex($data);
 
                     //DECODE IMEI
                     $imei = new ImeiNumber($data);
@@ -76,6 +76,9 @@ class SocketServer
                 }
 
                 else {
+
+                    //We always get binary info so we decode it into HEX
+                    $data = bin2hex($data);
 
                     //We get the first part of the data
                     if(strlen($data) == 20) {
