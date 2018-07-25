@@ -125,9 +125,11 @@ class TeltonikaDecoderImp implements TeltonikaDecoder
         $priority = hexdec(substr($hexDataOfElement, $stringSplitter, self::PRIORITY_HEX_LENGTH));
         $AVLElement->setPriority($priority);
         $stringSplitter+= self::PRIORITY_HEX_LENGTH;
-        $longitude = (float) (hexdec(substr($hexDataOfElement, $stringSplitter, self::LONGITUDE_HEX_LENGTH)) / 10000000);
+        $longitudeValueOnArrayTwoComplement = unpack("l", pack("l", hexdec(substr($hexDataOfElement, $stringSplitter, self::LONGITUDE_HEX_LENGTH))));
+        $longitude = (float) (reset($longitudeValueOnArrayTwoComplement) / 10000000);
         $stringSplitter+= self::LONGITUDE_HEX_LENGTH;
-        $latitude = (float) (hexdec(substr($hexDataOfElement, $stringSplitter, self::LATITUDE_HEX_LENGTH)) / 10000000);
+        $latitudeValueOnArrayTwoComplement = unpack("l", pack("l", hexdec(substr($hexDataOfElement, $stringSplitter, self::LATITUDE_HEX_LENGTH))));
+        $latitude = (float) (reset($latitudeValueOnArrayTwoComplement) / 10000000);
         $stringSplitter+= self::LATITUDE_HEX_LENGTH;
         $altitude = hexdec(substr($hexDataOfElement, $stringSplitter, self::ALTITUDE_HEX_LENGTH));
         $stringSplitter+= self::ALTITUDE_HEX_LENGTH;
@@ -156,5 +158,12 @@ class TeltonikaDecoderImp implements TeltonikaDecoder
 
         return $AVLElement;
 
+    }
+
+    private function convert($hex)
+    {
+        $dec = hexdec($hex);
+        return ($dec < 0x7fffffff) ? $dec
+            : 0 - (0xffffffff - $dec);
     }
 }

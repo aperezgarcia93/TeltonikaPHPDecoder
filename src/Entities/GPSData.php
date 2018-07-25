@@ -29,6 +29,8 @@ class GPSData implements \JsonSerializable
      */
     public function __construct($longitude, $latitude, $altitude, $angle, $satellites, $speed)
     {
+        //$this->longitude = $this->coordinateNegative($longitude) ? $longitude : $longitude *= -1;
+        //$this->latitude = $this->coordinateNegative($latitude) ? $latitude : $latitude *= -1;
         $this->longitude = $longitude;
         $this->latitude = $latitude;
         $this->altitude = $altitude;
@@ -152,5 +154,15 @@ class GPSData implements \JsonSerializable
                 'satellites'   => $this->getSatellites(),
                 'speed'   => $this->getSpeed(),
             ];
+    }
+
+    private function coordinateNegative(float $coordinate): bool
+    {
+        $binCoordinate = decbin($coordinate);
+        if (strlen($binCoordinate) === 32) {
+            return (int)substr($binCoordinate, 0, 1) === 1;
+        }
+
+        return false;
     }
 }

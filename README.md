@@ -16,8 +16,13 @@ This application provides some tools:
 
 # How to use
 
+- You need to configure your teltonika device to point to your host/ip with TCP protocol in the GPS settings section.
+
+- Open TCP port you will use in your network.
+
 - Fill your config.php with your information (database credentials, host, ip...)
 
+Create new php file (eg: run.php) and paste this code:
 ```php
 /*Initialize the server and it will start getting data from device, 
 parsing it and storing it into the database
@@ -25,8 +30,14 @@ parsing it and storing it into the database
 $server = new SocketServer(Conf::host, Conf::port);
 $server->runServer();
 ```
+Execute that php file:
+```shell
+php run.php
+```
+
+Server will start getting data from device.
 
 ## To do:
 
-- [ ] Error with longitude (Maybe parsing or related to encoding with bytes?)
+- [X] <del>Error with longitude (Maybe parsing or related to encoding with bytes?)</del> (FIXED)
 
